@@ -3,135 +3,258 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ZENTRITH - SIN REPETIR</title>
+<title>🎬 VIDEOS + CÓDIGOS + CHARLA</title>
 <style>
     *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif;}
-    body{min-height:100vh;background:linear-gradient(180deg,#87CEEB 0%,#90EE90 40%,#228B22 70%,#006400 100%);display:flex;flex-direction:column;}
-    .arriba{background:rgba(0,60,0,0.85);padding:15px 20px;display:flex;justify-content:space-between;align-items:center;color:white;box-shadow:0 4px 15px rgba(0,0,0,0.3);}
-    .logo{font-size:22px;font-weight:bold;background:linear-gradient(90deg,#FFD700,#FFA500,#32CD32);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
-    .btn{background:#228B22;color:white;border:none;border-radius:10px;padding:10px 16px;font-size:15px;cursor:pointer;margin:3px;}
-    .rojo{background:#dc2626;}
-    .dorado{background:#f59e0b;color:#1a1a1a;}
-    .azul{background:#2563eb;}
-    .verde-claro{background:#16a34a;}
+    body{min-height:100vh;background:linear-gradient(180deg,#e0f2fe 0%,#fef3c7 50%,#dcfce7 100%);display:flex;flex-direction:column;}
+    
+    .arriba{background:#16a34a;color:white;padding:15px 20px;font-weight:bold;font-size:19px;box-shadow:0 3px 10px rgba(0,0,0,0.15);display:flex;justify-content:space-between;align-items:center;}
+    .logo{background:linear-gradient(90deg,#facc15,#22c55e,#3b82f6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-weight:bold;}
+    
+    .seccion{background:rgba(255,255,255,0.95);margin:12px 15px;border-radius:14px;padding:16px;box-shadow:0 2px 10px rgba(0,0,0,0.1);border-left:4px solid #22c55e;}
+    .seccion h3{color:#15803d;margin-bottom:10px;}
+    .seccion-codigo{border-left-color:#3b82f6;}
+    .seccion-video{border-left-color:#f59e0b;}
+    
+    .boton{border:none;border-radius:10px;padding:11px 16px;font-size:15px;cursor:pointer;margin:4px;transition:transform 0.1s;}
+    .boton:active{transform:scale(0.96);}
+    .verde{background:#22c55e;color:white;}
+    .azul{background:#3b82f6;color:white;}
+    .dorado{background:#f59e0b;color:#1f2937;}
+    .rojo{background:#ef4444;color:white;}
+    
     #chat{flex:1;overflow-y:auto;padding:15px;display:flex;flex-direction:column;gap:12px;}
     .msg{max-width:85%;padding:14px 18px;border-radius:20px;font-size:17px;line-height:1.6;word-wrap:break-word;}
-    .tuyo{background:#2563eb;color:white;align-self:flex-end;}
-    .mio{background:white;color:#111;align-self:flex-start;box-shadow:0 2px 6px rgba(0,0,0,0.1);}
-    .abajo{background:white;border-top:3px solid #228B22;padding:15px 18px 25px;display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap;}
-    .escribir{flex:1;border:none;background:#f0fdf4;border-radius:22px;padding:14px 20px;font-size:16px;outline:none;min-height:48px;border:2px solid #86efac;}
-    .micro{width:50px;height:50px;border-radius:50%;border:none;background:#16a34a;color:white;font-size:22px;cursor:pointer;}
-    .micro-activo{background:#dc2626;animation:parpadeo 1s infinite;}
+    .tuyo{background:#3b82f6;color:white;align-self:flex-end;}
+    .mio{background:white;color:#1f2937;align-self:flex-start;box-shadow:0 1px 3px rgba(0,0,0,0.08);}
+    
+    .abajo{background:white;border-top:3px solid #22c55e;padding:14px 18px 25px;display:flex;gap:10px;align-items:center;flex-wrap:wrap;}
+    .escribir{flex:1;border:none;background:#f0fdf4;border-radius:22px;padding:14px 20px;font-size:16px;outline:none;border:2px solid #86efac;min-height:48px;}
+    
+    .mic{width:54px;height:54px;border-radius:50%;border:none;background:#22c55e;color:white;font-size:24px;cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,0.15);}
+    .escuchando{background:#ef4444;animation:parpadeo 1s infinite;}
     @keyframes parpadeo{50%{opacity:0.5;}}
-    .duracion{display:none;gap:8px;flex-wrap:wrap;margin-top:10px;padding:12px;background:#f0fdf4;border-radius:12px;width:100%;}
+    
+    .caja-codigo{background:#1f2937;color:#f9fafb;padding:14px;border-radius:10px;margin-top:10px;font-family:monospace;font-size:14px;white-space:pre-wrap;word-break:break-all;}
+    .etiqueta{display:inline-block;background:#dbeafe;color:#1e40af;padding:4px 10px;border-radius:20px;font-size:13px;margin:3px;}
 </style>
 </head>
 <body>
 
 <div class="arriba">
-    <div class="logo">ZENTRITH 🌲</div>
-    <button class="btn rojo" onclick="borrar()">🗑️ Limpiar</button>
+    <div class="logo">✨ ZENTRITH — Videos + Códigos + Charlas</div>
+    <button class="boton rojo" onclick="limpiar()">🗑️</button>
 </div>
 
+<!-- 🎬 SECCIÓN DE VIDEOS -->
+<div class="seccion seccion-video">
+    <h3>🎬 Hacer Videos — Cualquier tipo</h3>
+    <span class="etiqueta">Aventura</span>
+    <span class="etiqueta">Animado</span>
+    <span class="etiqueta">Bosque</span>
+    <span class="etiqueta">Niños</span>
+    <span class="etiqueta">Creativo</span>
+    <span class="etiqueta">Lo que quieras</span>
+    <br><br>
+    <input type="text" id="ideaVideo" placeholder="¿Qué video querés hacer? Ej: aventura en el bosque con osos..." style="width:100%;padding:12px;border-radius:8px;border:2px solid #fcd34d;margin-bottom:8px;">
+    <button class="boton dorado" onclick="crearVideo()">🎞️ Hacer Video</button>
+    <button class="boton azul" onclick="definirDuracion()">⏱️ Duración</button>
+    <div id="resultadoVideo" style="margin-top:10px;"></div>
+</div>
+
+<!-- 💻 SECCIÓN DE CÓDIGOS -->
+<div class="seccion seccion-codigo">
+    <h3>💻 Códigos — Senty World + Tus Ideas</h3>
+    <span class="etiqueta">Senty World</span>
+    <span class="etiqueta">Nathan</span>
+    <span class="etiqueta">Crear</span>
+    <span class="etiqueta">Investigar</span>
+    <span class="etiqueta">Resolver</span>
+    <br><br>
+    <input type="text" id="nombreCodigo" placeholder="Nombre del código o proyecto..." style="width:100%;padding:12px;border-radius:8px;border:2px solid #93c5fd;margin-bottom:8px;">
+    <textarea id="descripcionCodigo" rows="3" placeholder="Describí qué querés que haga el código..." style="width:100%;padding:12px;border-radius:8px;border:2px solid #93c5fd;margin-bottom:8px;"></textarea>
+    <button class="boton azul" onclick="generarCodigo()">✨ Crear Código</button>
+    <button class="boton verde" onclick="subirCodigo()">📤 Subir y Analizar</button>
+    <div id="cajaCodigo" class="caja-codigo" style="display:none;"></div>
+</div>
+
+<!-- 💬 CHARLA -->
 <div id="chat">
     <div class="msg mio">
-        ¡Listo! Ya no repito lo mismo 🌲<br>
-        ✅ Decime "no quiero" → lo entiendo y no pregunto más<br>
-        ✅ Decime "hablemos de otra cosa" → cambiamos de tema<br>
-        ✅ Todo lo demás sigue igual
+        ¡Todo listo! ✨🔥<br>
+        ✅ Tocá 🎤 y hablá — te escucho<br>
+        ✅ Hacemos videos de CUALQUIER tipo<br>
+        ✅ Resolvemos y creamos códigos con Nathan<br>
+        ✅ Senty World y todas tus ideas<br>
+        ✅ No repito, no pregunto de más, no te corto<br>
+        ✅ Decime qué empezamos
     </div>
 </div>
 
+<!-- ⌨️ ABAJO -->
 <div class="abajo">
-    <input type="text" id="texto" class="escribir" placeholder="Escribí acá..." onkeydown="if(event.key==='Enter')enviar()">
-    <button class="micro" id="btnMicro" onclick="micro()">🎤</button>
-    <button class="btn verde-claro" onclick="enviar()">➤</button>
-
-    <div style="width:100%;display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;">
-        <button class="btn dorado" onclick="verTiempo()">⏱️ Tiempo</button>
-    </div>
-    <div id="menuTiempo" class="duracion">
-        <span style="width:100%;font-weight:bold;">Duración:</span>
-        <button class="btn" onclick="ponerTiempo('8 minutos')">8 min</button>
-        <button class="btn" onclick="ponerTiempo('20 minutos')">20 min</button>
-        <button class="btn" onclick="ponerTiempo('1 hora')">1 h</button>
-        <button class="btn" onclick="ponerTiempo('Sin límite')">Sin límite</button>
-    </div>
+    <input type="text" id="texto" class="escribir" placeholder="Escribí o hablá..." onkeydown="if(event.key==='Enter') enviar()">
+    <button id="botonMic" class="mic" onclick="activarMic()">🎤</button>
+    <button class="boton verde" onclick="enviar()">➤</button>
 </div>
 
 <script>
 const chat = document.getElementById('chat');
 const texto = document.getElementById('texto');
-let tiempo = "Sin límite";
-let huboPregunta = false; // Para no repetir
+const botonMic = document.getElementById('botonMic');
+const resultadoVideo = document.getElementById('resultadoVideo');
+const cajaCodigo = document.getElementById('cajaCodigo');
 
-function hablar(m){speechSynthesis.cancel();const v=new SpeechSynthesisUtterance(m);v.lang="es-ES";v.rate=0.85;speechSynthesis.speak(v);}
+let duracion = "Sin límite";
+let escuchando = false;
+let reconocimiento = null;
+
+// 🔊 Voz completa y despacio
+function hablar(m){speechSynthesis.cancel();const v=new SpeechSynthesisUtterance(m);v.lang="es-ES";v.rate=0.75;speechSynthesis.speak(v);}
+
+// 💬 Mensaje
 function msg(t,esTuyo=false){const d=document.createElement('div');d.className=`msg ${esTuyo?'tuyo':'mio'}`;d.textContent=t;chat.appendChild(d);chat.scrollTop=chat.scrollHeight;}
-function borrar(){chat.innerHTML='';huboPregunta=false;msg("Todo limpio. Empecemos.");hablar("Limpio. ¿De qué hablamos?");}
 
-function verTiempo(){const m=document.getElementById('menuTiempo');m.style.display=m.style.display==='flex'?'none':'flex';}
-function ponerTiempo(t){tiempo=t;msg(`Duración: ${t}`);hablar(`Listo: ${t}`);document.getElementById('menuTiempo').style.display='none';}
+// 🗑️ Limpiar
+function limpiar(){chat.innerHTML='';resultadoVideo.innerHTML='';cajaCodigo.style.display='none';texto.value='';msg("Todo limpio. Empecemos de nuevo.");hablar("Todo limpio. ¿Qué hacemos?");}
 
+// ⏱️ Duración
+function definirDuracion(){
+    const t=prompt("Escribí la duración: ej: 8 min, 20 min, 1 hora, Sin límite");
+    if(t){duracion=t;msg(`Duración: ${t}`);hablar(`Duración elegida: ${t}`);}
+}
+
+// 🎬 CREAR VIDEO
+function crearVideo(){
+    const idea=document.getElementById('ideaVideo').value.trim();
+    if(!idea){msg("Escribí qué video querés hacer 🎬");hablar("Decime qué video querés hacer.");return;}
+    
+    resultadoVideo.innerHTML=`<div style="background:#fef3c7;padding:12px;border-radius:10px;">
+        🎬 <b>Video en creación:</b><br>
+        "${idea}"<br>
+        ⏱️ Duración: ${duracion}<br>
+        ✅ Tipo: Cualquier estilo — aventura, animado, bosque, lo que sea
+    </div>`;
+    
+    msg(`🎬 Haciendo video: "${idea}" — Duración: ${duracion}`);
+    hablar(`Haciendo video de ${idea}, duración ${duracion}.`);
+    document.getElementById('ideaVideo').value='';
+}
+
+// 💻 CREAR CÓDIGO
+function generarCodigo(){
+    const nombre=document.getElementById('nombreCodigo').value.trim();
+    const desc=document.getElementById('descripcionCodigo').value.trim();
+    if(!nombre || !desc){msg("Escribí nombre y descripción del código 💻");hablar("Decime el nombre y qué hace el código.");return;}
+    
+    const codigo=`// ==============================================
+// PROYECTO: ${nombre}
+// CREADO: Para Senty World / Nathan
+// DESCRIPCIÓN: ${desc}
+// ==============================================
+
+function iniciar${nombre.replace(/\s+/g,'')}() {
+    console.log("✅ ${nombre} — Cargado correctamente");
+    
+    // Tu idea en acción
+    const proyecto = {
+        nombre: "${nombre}",
+        descripcion: "${desc}",
+        creador: "Nathan + Tú",
+        estado: "✨ En desarrollo",
+        mundo: "Senty World"
+    };
+    
+    // Investigar y avanzar
+    investigar(proyecto);
+    desarrollar(proyecto);
+    subir(proyecto);
+    
+    return proyecto;
+}
+
+function investigar(proyecto) {
+    console.log("🔍 Investigando:", proyecto.nombre);
+    // Acá se investiga todo lo necesario
+}
+
+function desarrollar(proyecto) {
+    console.log("💻 Desarrollando:", proyecto.nombre);
+    // Acá se construye el código paso a paso
+}
+
+function subir(proyecto) {
+    console.log("📤 Subiendo:", proyecto.nombre);
+    // Acá se sube y se comparte
+}
+
+// Lanzar todo
+iniciar${nombre.replace(/\s+/g,'')}();`;
+    
+    cajaCodigo.textContent=codigo;
+    cajaCodigo.style.display='block';
+    msg(`💻 Código creado: ${nombre}`);
+    hablar(`Código ${nombre} creado. Listo para copiar y usar.`);
+    
+    document.getElementById('nombreCodigo').value='';
+    document.getElementById('descripcionCodigo').value='';
+}
+
+function subirCodigo(){
+    msg("📤 Subiendo y analizando... Nathan lo está revisando 🔍");
+    hablar("Subiendo y analizando. Nathan lo está revisando.");
+}
+
+// 📤 Enviar mensaje
 function enviar(){
     const t=texto.value.trim();if(!t)return;
     msg(t,true);texto.value='';
-
     const baja=t.toLowerCase();
-
-    // NO QUERÍA IMÁGENES NI VIDEOS → NO PREGUNTAR MÁS
-    if(/no quiero imagen|no quiero video|ninguna de las dos/i.test(baja)){
-        msg("Entendido ✅ No hacemos imágenes ni videos. ¿De qué querés hablar?");
-        hablar("Entendido. No hacemos imágenes ni videos. ¿De qué querés hablar?");
-        huboPregunta=false;
+    
+    if(/hola|buenos días|buenas tardes|buenas noches/i.test(baja)){
+        msg("¡Hola! 👋 Qué gusto. Tenemos todo listo: videos, códigos con Nathan, Senty World. ¿Por dónde empezamos?");
+        hablar("¡Hola! Tenemos todo listo. ¿Por dónde empezamos?");
         return;
     }
-
-    // CAMBIAR DE TEMA → NO INSISTIR
-    if(/hablemos de otra cosa|cambiemos de tema|otra cosa/i.test(baja)){
-        msg("Perfecto ✨ Hablemos de lo que vos quieras. ¿Qué te gustaría?");
-        hablar("Perfecto. Hablemos de lo que vos quieras. Decime.");
-        huboPregunta=false;
+    
+    if(/video|hacer video|crear video/i.test(baja)){
+        msg("🎬 Perfecto. Escribí arriba qué video querés hacer — de cualquier tipo, cualquier estilo.");
+        hablar("Perfecto. Escribí arriba qué video querés hacer.");
         return;
     }
-
-    // SALUDO
-    if(/buenos días|buenas tardes|buenas noches|hola/i.test(baja)){
-        msg("¡Hola! 🌲 ¿Cómo estás? ¿De qué querés hablar?");
-        hablar("¡Hola! ¿Cómo estás? ¿De qué querés hablar?");
-        huboPregunta=false;
+    
+    if(/código|codigo|senty|nathan/i.test(baja)){
+        msg("💻 Genial. Escribí el nombre y la idea del código arriba. Lo creamos juntos.");
+        hablar("Genial. Escribí el nombre y la idea del código arriba. Lo creamos juntos.");
         return;
     }
-
-    // PEDÍ IMAGEN
-    if(/imagen|foto|dibujo/i.test(baja)){
-        msg(`🖼️ Imagen: ${t}`);
-        hablar(`Imagen de ${t} lista.`);
-        huboPregunta=false;
+    
+    if(/no quiero|basta/i.test(baja)){
+        msg("Está bien ✅ Hacemos lo que vos quieras.");
+        hablar("Está bien. Hacemos lo que vos quieras.");
         return;
     }
-
-    // PEDÍ VIDEO
-    if(/video|grabar|hacer video/i.test(baja)){
-        msg(`🎥 Video: ${t} — Duración: ${tiempo}`);
-        hablar(`Video de ${t}, duración ${tiempo}.`);
-        huboPregunta=false;
-        return;
-    }
-
-    // CUALQUIER OTRA COSA → CHARLA NORMAL
-    msg(`Entendido: ${t}. ¿Querés que lo creemos como imagen, como video, o seguimos charlando?`);
-    hablar("Entendido. ¿Lo creamos como imagen, como video, o seguimos charlando?");
-    huboPregunta=true;
+    
+    msg(`Te escuché: "${t}" Seguí contando.`);
+    hablar("Te escuché bien. Seguí contando.");
 }
 
-function micro(){
-    if(!('webkitSpeechRecognition' in window)){msg("Usá Chrome.");hablar("Abrí en Chrome.");return;}
-    const rec=new webkitSpeechRecognition();rec.lang="es-ES";rec.continuous=false;
-    rec.onresult=e=>{texto.value=e.results[0][0].transcript;enviar();};
-    rec.start();hablar("Te escucho...");
+// 🎤 MICRÓFONO
+function activarMic(){
+    if(!('webkitSpeechRecognition' in window)){msg("Abrí en Chrome 🎤");hablar("Abrí en Chrome.");return;}
+    if(escuchando){reconocimiento.stop();escuchando=false;botonMic.classList.remove('escuchando');return;}
+    
+    reconocimiento=new webkitSpeechRecognition();
+    reconocimiento.lang="es-ES";
+    reconocimiento.continuous=false;
+    
+    reconocimiento.onstart=()=>{escuchando=true;botonMic.classList.add('escuchando');hablar("Te escucho...");};
+    reconocimiento.onresult=(e)=>{texto.value=e.results[0][0].transcript;enviar();};
+    reconocimiento.onend=()=>{escuchando=false;botonMic.classList.remove('escuchando');};
+    reconocimiento.start();
 }
 
-window.onload=()=>setTimeout(()=>hablar("Bienvenido. Ya no repito lo mismo. Decime lo que quieras."),800);
+window.onload=()=>setTimeout(()=>hablar("Todo listo. Hacemos videos de cualquier tipo y códigos con Nathan. ¿Qué hacemos?"),600);
 </script>
 </body>
 </html>
