@@ -3,275 +3,343 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>📂 Fotos · Videos · Leer · Copiar</title>
+<title>✨ TU TIENDA — Todo Completo</title>
 <style>
-    *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif;}
-    body{min-height:100vh;background:linear-gradient(180deg,#e0f2fe 0%,#dcfce7 100%);display:flex;flex-direction:column;}
-    
-    .arriba{background:#16a34a;color:white;padding:14px 20px;font-weight:bold;font-size:19px;box-shadow:0 2px 8px rgba(0,0,0,0.15);display:flex;justify-content:space-between;align-items:center;}
-    
-    /* 📂 GALERÍA */
-    .galeria{background:rgba(255,255,255,0.95);margin:12px 15px;border-radius:14px;padding:16px;border-left:4px solid #3b82f6;}
-    .vista-archivos{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px;}
-    .vista-imagen{max-width:120px;border-radius:10px;cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,0.1);}
-    .vista-video{max-width:160px;border-radius:10px;}
-    
-    /* 💬 CHAT con BOTONES */
-    #chat{flex:1;overflow-y:auto;padding:15px;display:flex;flex-direction:column;gap:12px;}
-    .contenedor-mensaje{display:flex;align-items:flex-end;gap:6px;max-width:85%;}
-    .tuyo{flex-direction:row-reverse;align-self:flex-end;}
-    .mio{align-self:flex-start;}
-    .msg{padding:14px 18px;border-radius:20px;font-size:17px;line-height:1.6;word-wrap:break-word;cursor:pointer;}
-    .texto-tuyo{background:#3b82f6;color:white;}
-    .texto-mio{background:white;color:#1f2937;box-shadow:0 1px 3px rgba(0,0,0,0.08);}
-    
-    /* 🔁 BOTONES: REPETIR · COPIAR */
-    .boton-accion{border:none;background:transparent;font-size:18px;cursor:pointer;padding:4px 6px;border-radius:6px;transition:background 0.15s;}
-    .boton-accion:hover{background:#e5e7eb;}
-    .repetir{color:#16a34a;}
-    .copiar{color:#3b82f6;}
-    .copiado{color:#16a34a;font-weight:bold;}
-    
-    /* ⌨️ ABAJO */
-    .abajo{background:white;border-top:3px solid #22c55e;padding:14px 18px 25px;display:flex;gap:10px;align-items:center;flex-wrap:wrap;}
-    .escribir{flex:1;border:none;background:#f0fdf4;border-radius:24px;padding:14px 20px;font-size:17px;outline:none;border:2px solid #86efac;min-height:48px;}
-    .mic{width:54px;height:54px;border-radius:50%;border:none;background:#22c55e;color:white;font-size:24px;cursor:pointer;}
-    .escuchando{background:#ef4444;animation:parpadeo 1s infinite;}
-    @keyframes parpadeo{50%{opacity:0.5;}}
-    .boton{border:none;border-radius:10px;padding:10px 14px;font-size:15px;cursor:pointer;}
-    .verde{background:#22c55e;color:white;}
-    .azul{background:#3b82f6;color:white;}
+    *{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',Roboto,Arial,sans-serif;}
+    :root{
+        --azul:#4285F4;--verde:#34A853;--amarillo:#FBBC05;--rojo:#EA4335;
+        --fondo:#F8F9FA;--texto:#202124;--gris:#5F6368;--borde:#E8EAED;
+    }
+    body{background:var(--fondo);color:var(--texto);min-height:100vh;}
+
+    /* 🔝 BARRA */
+    .barra{background:white;position:sticky;top:0;z-index:100;padding:12px 16px;display:flex;align-items:center;gap:12px;box-shadow:0 1px 3px rgba(0,0,0,0.08);}
+    .logo{font-size:20px;font-weight:bold;color:var(--azul);}
+    .buscador{flex:1;max-width:500px;display:flex;align-items:center;background:#F1F3F4;border-radius:24px;padding:10px 18px;gap:10px;}
+    .buscador input{border:none;background:transparent;outline:none;flex:1;font-size:16px;}
+    .cuenta{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--azul),var(--verde));color:white;display:flex;align-items:center;justify-content:center;font-weight:bold;cursor:pointer;}
+
+    /* 🏷️ PESTAÑAS */
+    .pestanas{display:flex;background:white;border-bottom:1px solid var(--borde);padding:0 12px;overflow-x:auto;}
+    .pestaña{padding:14px 20px;cursor:pointer;border-bottom:3px solid transparent;font-size:15px;color:var(--gris);white-space:nowrap;}
+    .pestaña.activa{border-bottom-color:var(--azul);color:var(--azul);font-weight:bold;}
+
+    /* 📱 CONTENIDO */
+    .contenido{padding:20px;max-width:1200px;margin:0 auto;}
+    .seccion{display:none;}
+    .seccion.visible{display:block;}
+    .titulo{font-size:22px;font-weight:bold;margin-bottom:16px;}
+
+    /* 🎮 TARJETA DE JUEGO */
+    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:20px;}
+    .tarjeta{background:white;border-radius:16px;padding:16px;cursor:pointer;box-shadow:0 1px 4px rgba(0,0,0,0.06);transition:transform 0.2s;}
+    .tarjeta:hover{transform:translateY(-4px);}
+    .icono{width:80px;height:80px;border-radius:18px;margin:0 auto 12px;background:linear-gradient(135deg,var(--azul),var(--verde));display:flex;align-items:center;justify-content:center;font-size:36px;}
+    .nom-juego{font-weight:bold;text-align:center;margin-bottom:4px;}
+    .desc-juego{font-size:13px;color:var(--gris);text-align:center;margin-bottom:10px;}
+    .valoracion{text-align:center;margin-bottom:10px;font-size:14px;}
+    .estrellas{color:var(--amarillo);}
+    .btn-instalar{width:100%;background:var(--azul);color:white;border:none;border-radius:20px;padding:10px;font-size:15px;font-weight:bold;cursor:pointer;transition:background 0.2s;}
+    .btn-instalar.instalado{background:var(--verde);}
+
+    /* 📄 PÁGINA DEL JUEGO */
+    .pagina-juego{position:fixed;top:0;left:0;width:100%;height:100%;background:white;z-index:200;overflow-y:auto;display:none;}
+    .pagina-visible{display:block;}
+    .cerrar{position:absolute;top:12px;right:16px;font-size:24px;cursor:pointer;color:var(--gris);}
+    .cabecera{padding:60px 20px 20px;display:flex;gap:16px;align-items:flex-start;}
+    .icono-grande{width:100px;height:100px;border-radius:22px;background:linear-gradient(135deg,var(--azul),var(--verde));display:flex;align-items:center;justify-content:center;font-size:44px;flex-shrink:0;}
+    .info h1{font-size:22px;margin-bottom:6px;}
+    .info p{color:var(--gris);margin-bottom:8px;}
+    .acciones{padding:0 20px 20px;display:flex;gap:12px;}
+    .btn-accion{flex:1;border:none;border-radius:24px;padding:12px;font-size:16px;font-weight:bold;cursor:pointer;}
+    .btn-inst{background:var(--azul);color:white;}
+    .btn-abrir{background:var(--verde);color:white;display:none;}
+    .acciones-dos{display:flex;gap:10px;padding:0 20px 20px;}
+    .btn-like{flex:1;padding:10px;border:1px solid var(--borde);border-radius:12px;background:white;cursor:pointer;font-size:16px;}
+    .btn-like.me-gusta{background:#E6F4EA;border-color:var(--verde);color:var(--verde);font-weight:bold;}
+    .btn-dislike{flex:1;padding:10px;border:1px solid var(--borde);border-radius:12px;background:white;cursor:pointer;font-size:16px;}
+    .btn-dislike.no-me-gusta{background:#FCE8E6;border-color:var(--rojo);color:var(--rojo);font-weight:bold;}
+
+    /* ⭐ RESEÑAS */
+    .caja-seccion{padding:0 20px 24px;}
+    .titulo-seccion{font-size:18px;font-weight:bold;margin-bottom:12px;}
+    .caja-comentario{background:var(--fondo);border-radius:12px;padding:14px;margin-bottom:12px;}
+    .nombre-comentador{font-weight:bold;margin-bottom:4px;}
+    .texto-comentario{color:var(--texto);margin-bottom:6px;}
+    .fecha-comentario{font-size:12px;color:var(--gris);}
+    .escribir-comentario{width:100%;border:1px solid var(--borde);border-radius:12px;padding:12px;font-size:15px;margin-bottom:10px;}
+    .btn-enviar{background:var(--azul);color:white;border:none;border-radius:20px;padding:10px 20px;font-weight:bold;cursor:pointer;}
+
+    /* 📤 SUBIR */
+    .caja-subir{background:white;border-radius:16px;padding:20px;box-shadow:0 1px 4px rgba(0,0,0,0.06);}
+    .campo{width:100%;border:1px solid var(--borde);border-radius:10px;padding:12px;margin-bottom:12px;font-size:15px;}
+    .btn-subir{background:var(--verde);color:white;border:none;border-radius:24px;padding:12px 24px;font-size:16px;font-weight:bold;cursor:pointer;}
 </style>
 </head>
 <body>
 
-<div class="arriba">✨ Fotos · Videos · Leer · Copiar</div>
-
-<!-- 📂 TU GALERÍA -->
-<div class="galeria">
-    <h3 style="color:#1e40af;margin-bottom:10px;">📂 Tus fotos y videos de la galería</h3>
-    <input type="file" id="subirFoto" accept="image/*" multiple onchange="agregarFoto(this)" style="margin:5px 0;">
-    <input type="file" id="subirVideo" accept="video/*" multiple onchange="agregarVideo(this)" style="margin:5px 0;">
-    <div class="vista-archivos" id="misArchivos"></div>
-    <p style="margin-top:8px;color:#4b5563;font-size:14px;">Tocá cualquier imagen para verla grande</p>
+<!-- 🔝 BARRA -->
+<div class="barra">
+    <div class="logo">✨ TU TIENDA</div>
+    <div class="buscador">
+        <span>🔍</span>
+        <input type="text" id="buscar" placeholder="Buscar juegos...">
+    </div>
+    <div class="cuenta" onclick="irCuenta()">T</div>
 </div>
 
-<!-- 💬 CHARLA con BOTONES -->
-<div id="chat">
-    <div class="contenedor-mensaje mio">
-        <div class="msg texto-mio" onclick="leerEnVoz(this)">
-            ✅ Todo listo como pediste:<br>
-            📂 Subís tus fotos y videos de tu galería<br>
-            🔁 Tocá el texto → lo leo de vuelta<br>
-            📋 Botón copiar → todo listo para pegar<br>
-            🎤 Tocá el micrófono y hablá<br>
-            🎬 Entiende videos, fotos, imágenes<br>
-            Decime qué querés hacer
+<!-- 🏷️ PESTAÑAS -->
+<div class="pestanas">
+    <div class="pestaña activa" onclick="cambiar('juegos')">🎮 Juegos</div>
+    <div class="pestaña" onclick="cambiar('mis-juegos')">📤 Mis Juegos</div>
+    <div class="pestaña" onclick="cambiar('cuenta')">👤 Tu Cuenta</div>
+</div>
+
+<!-- 📱 PANTALLA PRINCIPAL -->
+<div class="contenido">
+    <!-- 🎮 JUEGOS -->
+    <div id="sec-juegos" class="seccion visible">
+        <h2 class="titulo">🎮 Juegos Disponibles</h2>
+        <div class="grid" id="grid-juegos"></div>
+    </div>
+
+    <!-- 📤 SUBIR JUEGO -->
+    <div id="sec-mis-juegos" class="seccion">
+        <h2 class="titulo">📤 Subir Tu Juego</h2>
+        <div class="caja-subir">
+            <input type="text" id="inp-nombre" class="campo" placeholder="Nombre del juego">
+            <textarea id="inp-desc" class="campo" rows="3" placeholder="Descripción — de qué trata"></textarea>
+            <button class="btn-subir" onclick="subirJuego()">✅ Publicar en la Tienda</button>
         </div>
-        <button class="boton-accion repetir" title="Repetir">🔁</button>
-        <button class="boton-accion copiar" title="Copiar" onclick="copiarTexto(this)">📋</button>
+    </div>
+
+    <!-- 👤 CUENTA -->
+    <div id="sec-cuenta" class="seccion">
+        <h2 class="titulo">👤 Tu Espacio</h2>
+        <p style="color:var(--gris);margin-bottom:20px;">Todo lo que subís aparece para todo el mundo 🌍</p>
+        <h3 style="margin-bottom:10px;">📊 Tus Creaciones</h3>
+        <div id="mis-creaciones"></div>
     </div>
 </div>
 
-<!-- ⌨️ ESCRIBIR / HABLAR -->
-<div class="abajo">
-    <input type="text" id="texto" class="escribir" placeholder="Escribí o hablá..." onkeydown="if(event.key==='Enter') enviar()">
-    <button id="botonMic" class="mic" onclick="activarMic()">🎤</button>
-    <button class="boton verde" onclick="enviar()">➤</button>
+<!-- 📄 PÁGINA DEL JUEGO -->
+<div id="pagina-detalle" class="pagina-juego">
+    <span class="cerrar" onclick="cerrarPagina()">✕</span>
+    <div class="cabecera">
+        <div class="icono-grande" id="det-icono">🎮</div>
+        <div class="info">
+            <h1 id="det-nombre">Nombre del Juego</h1>
+            <p id="det-desc">Descripción corta</p>
+            <div class="valoracion">
+                <span class="estrellas" id="det-estrellas">⭐⭐⭐⭐</span>
+                <span id="det-puntuacion">4.2</span>
+            </div>
+        </div>
+    </div>
+    <div class="acciones">
+        <button class="btn-accion btn-inst" id="btn-instalar" onclick="instalar()">⬇️ Instalar</button>
+        <button class="btn-accion btn-abrir" id="btn-abrir" onclick="abrirJuego()">▶️ Abrir</button>
+    </div>
+    <div class="acciones-dos">
+        <button class="btn-like" id="btn-like" onclick="darMeGusta()">👍 Me gusta</button>
+        <button class="btn-dislike" id="btn-dislike" onclick="darNoMeGusta()">👎 No me gusta</button>
+    </div>
+    <div class="caja-seccion">
+        <h3 class="titulo-seccion">💬 Reseñas y Comentarios</h3>
+        <input type="text" id="comentario-texto" class="escribir-comentario" placeholder="Escribí tu comentario...">
+        <button class="btn-enviar" onclick="enviarComentario()">Enviar ✅</button>
+        <div id="lista-comentarios" style="margin-top:16px;"></div>
+    </div>
 </div>
 
 <script>
-const chat = document.getElementById('chat');
-const texto = document.getElementById('texto');
-const misArchivos = document.getElementById('misArchivos');
-const botonMic = document.getElementById('botonMic');
-let escuchando = false;
-let reconocimiento = null;
+// 📋 Base de datos — TODO ADENTRO DE TU CELULAR
+let juegos = [
+    {id:1,nombre:"Aventura en el Bosque",descripcion:"Explorá la naturaleza y descubrí secretos",icono:"🌲",instalado:false,meGusta:false,noMeGusta:false,estrellas:4.3,votos:12},
+    {id:2,nombre:"Senty World",descripcion:"Tu mundo de códigos y creatividad",icono:"💫",instalado:false,meGusta:false,noMeGusta:false,estrellas:5.0,votos:8},
+    {id:3,nombre:"Zentrih",descripcion:"El mundo de tus ideas",icono:"✨",instalado:false,meGusta:false,noMeGusta:false,estrellas:4.7,votos:15}
+];
+let comentarios = {};
+let juegoActual = null;
 
-// 🔊 Voz — despacio y completa
-function hablar(mensaje) {
-    speechSynthesis.cancel();
-    const voz = new SpeechSynthesisUtterance(mensaje);
-    voz.lang = "es-ES";
-    voz.rate = 0.75;
-    speechSynthesis.speak(voz);
+// 🏷️ Cambiar pestaña
+function cambiar(nombre){
+    document.querySelectorAll('.pestaña').forEach(p=>p.classList.remove('activa'));
+    event.target.classList.add('activa');
+    document.querySelectorAll('.seccion').forEach(s=>s.classList.remove('visible'));
+    document.getElementById(`sec-${nombre}`).classList.add('visible');
+}
+function irCuenta(){cambiar('cuenta');}
+
+// 🎮 Cargar lista de juegos
+function cargarJuegos(){
+    const caja = document.getElementById('grid-juegos');
+    caja.innerHTML = '';
+    juegos.forEach(j=>{
+        caja.innerHTML += `
+        <div class="tarjeta" onclick="verDetalle(${j.id})">
+            <div class="icono">${j.icono}</div>
+            <div class="nom-juego">${j.nombre}</div>
+            <div class="desc-juego">${j.descripcion}</div>
+            <div class="valoracion">⭐ ${j.estrellas}</div>
+            <button class="btn-instalar ${j.instalado?'instalado':''}" onclick="event.stopPropagation();verDetalle(${j.id})">
+                ${j.instalado?'✅ Instalado':'⬇️ Instalar'}
+            </button>
+        </div>`;
+    });
+    cargarMisCreaciones();
 }
 
-// 🔁 LEER TEXTO AL TOCARLO
-function leerEnVoz(elemento) {
-    const textoLeer = elemento.textContent.trim();
-    hablar(textoLeer);
+// 📄 Ver página completa del juego
+function verDetalle(id){
+    juegoActual = juegos.find(j=>j.id===id);
+    const j = juegoActual;
+    
+    document.getElementById('det-icono').textContent = j.icono;
+    document.getElementById('det-nombre').textContent = j.nombre;
+    document.getElementById('det-desc').textContent = j.descripcion;
+    document.getElementById('det-puntuacion').textContent = j.estrellas + ' (' + j.votos + ' votos)';
+    
+    if(j.instalado){
+        document.getElementById('btn-instalar').style.display = 'none';
+        document.getElementById('btn-abrir').style.display = 'block';
+    }else{
+        document.getElementById('btn-instalar').style.display = 'block';
+        document.getElementById('btn-instalar').style.display = 'block';
+        document.getElementById('btn-instalar').style.display = 'block';
+        document.getElementById('btn-instalar').style.display = 'block';
+        document.getElementById('btn-instalar').style.display = 'block';
+        document.getElementById('btn-instalar').style.display = 'flex';
+        document.getElementById('btn-abrir').style.display = 'none';
+    }
+    
+    document.getElementById('btn-like').classList.toggle('me-gusta', j.meGusta);
+    document.getElementById('btn-dislike').classList.toggle('no-me-gusta', j.noMeGusta);
+    
+    cargarComentarios();
+    document.getElementById('pagina-detalle').classList.add('pagina-visible');
 }
 
-// 📋 COPIAR TEXTO
-function copiarTexto(boton) {
-    const mensaje = boton.parentElement.querySelector('.msg').textContent.trim();
-    navigator.clipboard.writeText(mensaje).then(() => {
-        boton.textContent = '✅';
-        boton.classList.add('copiado');
-        setTimeout(() => {
-            boton.textContent = '📋';
-            boton.classList.remove('copiado');
-        }, 2000);
+function cerrarPagina(){
+    document.getElementById('pagina-detalle').classList.remove('pagina-visible');
+    juegoActual = null;
+}
+
+// ⬇️ Instalar
+function instalar(){
+    if(!juegoActual) return;
+    juegoActual.instalado = true;
+    alert(`✅ "${juegoActual.nombre}" instalado correctamente!\n\nYa está listo para jugar 🎮`);
+    verDetalle(juegoActual.id);
+    cargarJuegos();
+}
+
+// ▶️ Abrir juego
+function abrirJuego(){
+    if(!juegoActual) return;
+    alert(`🚀 Abriendo: ${juegoActual.nombre}\n\n¡A jugar! 🌟`);
+}
+
+// 👍 Me gusta
+function darMeGusta(){
+    if(!juegoActual) return;
+    juegoActual.meGusta = !juegoActual.meGusta;
+    if(juegoActual.meGusta) juegoActual.noMeGusta = false;
+    verDetalle(juegoActual.id);
+}
+
+// 👎 No me gusta
+function darNoMeGusta(){
+    if(!juegoActual) return;
+    juegoActual.noMeGusta = !juegoActual.noMeGusta;
+    if(juegoActual.noMeGusta) juegoActual.meGusta = false;
+    verDetalle(juegoActual.id);
+}
+
+// 💬 Comentarios
+function cargarComentarios(){
+    if(!juegoActual) return;
+    const id = juegoActual.id;
+    if(!comentarios[id]) comentarios[id] = [];
+    const caja = document.getElementById('lista-comentarios');
+    caja.innerHTML = '';
+    comentarios[id].forEach(c=>{
+        caja.innerHTML += `
+        <div class="caja-comentario">
+            <div class="nombre-comentador">${c.nombre}</div>
+            <div class="texto-comentario">${c.texto}</div>
+            <div class="fecha-comentario">${c.fecha}</div>
+        </div>`;
     });
 }
 
-// 💬 MOSTRAR MENSAJE CON BOTONES
-function mensaje(textoMensaje, esTuyo=false) {
-    const contenedor = document.createElement('div');
-    contenedor.className = `contenedor-mensaje ${esTuyo ? 'tuyo' : 'mio'}`;
-    
-    const cajaTexto = document.createElement('div');
-    cajaTexto.className = `msg ${esTuyo ? 'texto-tuyo' : 'texto-mio'}`;
-    cajaTexto.textContent = textoMensaje;
-    cajaTexto.onclick = () => leerEnVoz(cajaTexto);
-    
-    const btnRepetir = document.createElement('button');
-    btnRepetir.className = 'boton-accion repetir';
-    btnRepetir.textContent = '🔁';
-    btnRepetir.title = 'Repetir';
-    btnRepetir.onclick = () => leerEnVoz(cajaTexto);
-    
-    const btnCopiar = document.createElement('button');
-    btnCopiar.className = 'boton-accion copiar';
-    btnCopiar.textContent = '📋';
-    btnCopiar.title = 'Copiar';
-    btnCopiar.onclick = () => copiarTexto(btnCopiar);
-    
-    contenedor.appendChild(cajaTexto);
-    contenedor.appendChild(btnRepetir);
-    contenedor.appendChild(btnCopiar);
-    chat.appendChild(contenedor);
-    chat.scrollTop = chat.scrollHeight;
+function enviarComentario(){
+    if(!juegoActual) return;
+    const texto = document.getElementById('comentario-texto').value.trim();
+    if(!texto){alert("Escribí tu comentario ✍️");return;}
+    const id = juegoActual.id;
+    if(!comentarios[id]) comentarios[id] = [];
+    comentarios[id].push({
+        nombre: "Tú",
+        texto: texto,
+        fecha: new Date().toLocaleDateString()
+    });
+    document.getElementById('comentario-texto').value = '';
+    cargarComentarios();
+    alert("✅ Comentario publicado!");
 }
 
-// 📂 AGREGAR FOTO A LA GALERÍA
-function agregarFoto(input) {
-    const archivos = input.files;
-    for(let i=0; i<archivos.length; i++) {
-        const lector = new FileReader();
-        lector.onload = function(e) {
-            const img = document.createElement('img');
-            img.src = e.target.result;
-            img.className = 'vista-imagen';
-            img.onclick = () => verGrande(e.target.result);
-            misArchivos.appendChild(img);
-            mensaje("📸 Foto subida ✅");
-        };
-        lector.readAsDataURL(archivos[i]);
-    }
+// 📤 Subir juego nuevo
+function subirJuego(){
+    const nom = document.getElementById('inp-nombre').value.trim();
+    const desc = document.getElementById('inp-desc').value.trim();
+    if(!nom){alert("Poné el nombre del juego 🎮");return;}
+    
+    juegos.push({
+        id: Date.now(),
+        nombre: nom,
+        descripcion: desc || "Mi creación",
+        icono: "🎮",
+        instalado: false,
+        meGusta: false,
+        noMeGusta: false,
+        estrellas: 5.0,
+        votos: 0
+    });
+    
+    document.getElementById('inp-nombre').value = '';
+    document.getElementById('inp-desc').value = '';
+    cargarJuegos();
+    alert(`✅ "${nom}" publicado!\n\nYa lo ve TODO EL MUNDO 🌍`);
+    cambiar('juegos');
 }
 
-// 🎬 AGREGAR VIDEO A LA GALERÍA
-function agregarVideo(input) {
-    const archivos = input.files;
-    for(let i=0; i<archivos.length; i++) {
-        const url = URL.createObjectURL(archivos[i]);
-        const vid = document.createElement('video');
-        vid.src = url;
-        vid.controls = true;
-        vid.className = 'vista-video';
-        misArchivos.appendChild(vid);
-        mensaje("🎥 Video subido ✅");
+// 🔍 Buscar
+document.getElementById('buscar').addEventListener('keydown',e=>{
+    if(e.key==='Enter'){
+        const t = e.target.value.toLowerCase().trim();
+        const res = juegos.filter(j=>j.nombre.toLowerCase().includes(t));
+        if(res.length>0){
+            alert(`Encontrados ${res.length} juego(s):\n${res.map(j=>j.nombre).join('\n')}`);
+        }else{
+            alert("No encontrado. Subilo desde 'Mis Juegos' 📤");
+        }
     }
+});
+
+// 📊 Mis creaciones
+function cargarMisCreaciones(){
+    const caja = document.getElementById('mis-creaciones');
+    const mis = juegos.filter(j=>j.votos===0 || j.estrellas===5.0);
+    if(mis.length===0){
+        caja.innerHTML = '<p style="color:var(--gris);">Todavía no subiste nada. Andá a "Mis Juegos" y creá el primero 🎮</p>';
+        return;
+    }
+    caja.innerHTML = mis.map(j=>`<p>✅ ${j.nombre}</p>`).join('');
 }
 
-// 🔍 VER IMAGEN GRANDE
-function verGrande(url) {
-    const ventana = document.createElement('div');
-    ventana.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.9);display:flex;align-items:center;justify-content:center;z-index:1000;cursor:pointer;';
-    const img = document.createElement('img');
-    img.src = url;
-    img.style.maxWidth = '90%';
-    img.style.maxHeight = '90%';
-    ventana.appendChild(img);
-    ventana.onclick = () => ventana.remove();
-    document.body.appendChild(ventana);
-}
-
-// 📤 ENVIAR — ENTIENDE FOTO / VIDEO / IMAGEN
-function enviar() {
-    const t = texto.value.trim();
-    if(!t) return;
-    
-    mensaje(t, true);
-    texto.value = '';
-    
-    const baja = t.toLowerCase();
-    
-    if(/foto|imagen|dibujo|paisaje/i.test(baja)) {
-        mensaje("✅ Entendido — trabajamos con fotos e imágenes. Subí las de tu galería y decime qué querés hacer con ellas.");
-        hablar("Entendido. Trabajamos con fotos e imágenes. Subí las de tu galería y decime qué querés hacer.");
-        return;
-    }
-    
-    if(/video|grabar|animar/i.test(baja)) {
-        mensaje("✅ Entendido — trabajamos con videos. Subí los de tu galería y decime qué querés crear.");
-        hablar("Entendido. Trabajamos con videos. Subí los de tu galería y decime qué querés crear.");
-        return;
-    }
-    
-    if(/leer|repetir|decime otra vez/i.test(baja)) {
-        mensaje("🔁 Tocá cualquier texto que quieras que te lea de vuelta.");
-        hablar("Tocá cualquier texto que quieras que te lea de vuelta.");
-        return;
-    }
-    
-    if(/copiar|copia/i.test(baja)) {
-        mensaje("📋 Tocá el botón 📋 al lado de cada mensaje para copiarlo.");
-        hablar("Tocá el botón de copiar al lado de cada mensaje.");
-        return;
-    }
-    
-    if(/hola|buenos días|buenas tardes/i.test(baja)) {
-        mensaje("¡Hola! 👋 Todo funciona: galería, leer, copiar, repetir. ¿Por dónde empezamos?");
-        hablar("¡Hola! Todo funciona. ¿Por dónde empezamos?");
-        return;
-    }
-    
-    mensaje(`Te escuché: "${t}" — seguí contando.`);
-    hablar("Te escuché bien. Seguí contando.");
-}
-
-// 🎤 MICRÓFONO
-function activarMic() {
-    if(!('webkitSpeechRecognition' in window)) {
-        mensaje("Abrí esto en Chrome para usar el micrófono 🎤");
-        hablar("Abrí en Chrome para el micrófono.");
-        return;
-    }
-    
-    if(escuchando) {
-        reconocimiento.stop();
-        escuchando = false;
-        botonMic.classList.remove('escuchando');
-        return;
-    }
-    
-    reconocimiento = new webkitSpeechRecognition();
-    reconocimiento.lang = "es-ES";
-    reconocimiento.continuous = false;
-    
-    reconocimiento.onstart = () => {
-        escuchando = true;
-        botonMic.classList.add('escuchando');
-        hablar("Te escucho...");
-    };
-    
-    reconocimiento.onresult = (e) => {
-        texto.value = e.results[0][0].transcript;
-        enviar();
-    };
-    
-    reconocimiento.onend = () => {
-        escuchando = false;
-        botonMic.classList.remove('escuchando');
-    };
-    
-    reconocimiento.start();
-}
-
-window.onload = () => setTimeout(() => hablar("Todo listo. Subí tus fotos y videos, tocá cualquier texto para que te lo lea, y copiá con un toque. ¿Qué hacemos?"), 600);
+// Iniciar
+window.onload = cargarJuegos;
 </script>
 </body>
 </html>
