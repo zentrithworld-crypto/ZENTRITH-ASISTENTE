@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ZENTRITH 🌲 BOSQUE Y AVENTURA</title>
+<style>
+    * {margin:0;padding:0;box-sizing:border-box;font-family:Arial, sans-serif;}
+    body {
+        min-height:100vh;
+        background:linear-gradient(180deg, #87CEEB 0%, #90EE90 40%, #228B22 70%, #006400 100%);
+        display:flex;flex-direction:column;
+    }
+
+    /* 🌲 LOGO Y CABECERA */
+    .arriba {
+        background:rgba(0,60,0,0.85);
+        padding:15px 20px;
+        display:flex;justify-content:space-between;align-items:center;
+        color:white;
+        box-shadow:0 4px 15px rgba(0,0,0,0.3);
+    }
+    .logo {
+        font-size:22px;font-weight:bold;
+        background:linear-gradient(90deg, #FFD700, #FFA500, #32CD32);
+        -webkit-background-clip:text;
+        -webkit-text-fill-color:transparent;
+        background-clip:text;
+    }
+    .boton {
+        background:#228B22;color:white;border:none;border-radius:10px;
+        padding:10px 16px;font-size:15px;cursor:pointer;margin:3px;
+        box-shadow:0 2px 6px rgba(0,0,0,0.25);
+        transition:transform 0.15s;
+    }
+    .boton:active {transform:scale(0.96);}
+    .rojo {background:#dc2626;}
+    .dorado {background:#f59e0b;color:#1a1a1a;}
+    .verde-claro {background:#16a34a;}
+    .azul {background:#2563eb;}
+    .morado {background:#9333ea;}
+    .naranja {background:#f97316;}
+
+    /* 🐻 ESCENA DEL BOSQUE */
+    .escena-bosque {
+        background:rgba(255,255,255,0.92);
+        margin:15px;border-radius:16px;padding:20px;
+        box-shadow:0 4px 20px rgba(0,0,0,0.15);
+        border:3px solid #228B22;
+    }
+    .bosque-visual {
+        background:linear-gradient(180deg, #87CEEB 0%, #98FB98 50%, #006400 100%);
+        border-radius:12px;padding:20px;text-align:center;
+        min-height:180px;display:flex;align-items:center;justify-content:center;
+        font-size:28px;
+        margin-bottom:15px;
+    }
+    .oso {
+        font-size:40px;margin:0 8px;animation:suave 3s infinite ease-in-out;
+    }
+    @keyframes suave {
+        0%,100% {transform:translateY(0);}
+        50% {transform:translateY(-8px);}
+    }
+
+    /* 🧍 PERSONAJES Y OBJETOS */
+    .creador {
+        background:rgba(255,255,255,0.95);
+        margin:10px 15px;border-radius:12px;padding:15px;
+        border:2px solid #228B22;
+    }
+    .creador input, .creador select {
+        width:100%;margin:8px 0;padding:12px;border-radius:10px;border:2px solid #86efac;font-size:16px;
+    }
+    .lista-creados {
+        margin-top:12px;display:flex;flex-wrap:wrap;gap:10px;
+    }
+    .tarjeta {
+        background:white;border-radius:12px;padding:12px;
+        box-shadow:0 2px 8px rgba(0,0,0,0.1);
+        border:2px solid #228B22;
+        width:calc(50% - 5px);
+    }
+    .tarjeta b {color:#006400;}
+
+    /* 💬 CHAT Y MENSAJES */
+    #pantalla {
+        flex:1;overflow-y:auto;padding:15px;display:flex;flex-direction:column;gap:12px;
+    }
+    .mensaje {
+        max-width:85%;padding:14px 18px;border-radius:20px;font-size:17px;line-height:1.6;
+        word-wrap:break-word;
+    }
+    .tuyo {background:#2563eb;color:white;align-self:flex-end;}
+    .mio {background:white;color:#111;align-self:flex-start;box-shadow:0 2px 6px rgba(0,0,0,0.1);}
+
+    /* 📤 SUBIR TUS COSAS DE LA GALERÍA */
+    .zona-archivos {
+        background:rgba(255,255,255,0.95);
+        margin:10px 15px;border-radius:12px;padding:15px;
+        border:2px dashed #228B22;
+    }
+    .vista-imagen {
+        max-width:250px;border-radius:10px;margin:10px 0;box-shadow:0 3px 10px rgba(0,0,0,0.15);
+    }
+    .vista-video {
+        max-width:280px;border-radius:10px;margin:10px 0;
+    }
+
+    /* ⌨️ BARRA DE ABAJO */
+    .abajo {
+        background:white;border-top:3px solid #228B22;
+        padding:15px 18px 25px;
+        display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap;
+    }
+    .escribir {
+        flex:1;border:none;background:#f0fdf4;border-radius:22px;
+        padding:14px 20px;font-size:16px;outline:none;min-height:48px;
+        border:2px solid #86efac;
+    }
+    .micro {
+        width:50px;height:50px;border-radius:50%;border:none;
+        background:#16a34a;color:white;font-size:22px;cursor:pointer;
+        box-shadow:0 3px 8px rgba(0,0,0,0.2);
+    }
+    .micro-activo {background:#dc2626;animation:parpadeo 1s infinite;}
+    @keyframes parpadeo {50% {opacity:0.5;}}
+
+    .oculto {display:none;}
+    .duracion {
+        display:none;gap:8px;flex-wrap:wrap;margin-top:10px;padding:12px;background:#f0fdf4;
+        border-radius:12px;width:100%;
+    }
+    .etiqueta-dato {
+        background:#eff6ff;border-radius:8px;padding:8px 12px;margin:4px 0;
+        font-size:14px;color:#1e40af;
+    }
+</style>
+</head>
+<body>
+
+<!-- 🏷️ LOGO Y ARRIBA -->
+<div class="arriba">
+    <div class="logo">ZENTRITH 🌲 BOSQUE</div>
+    <div>
+        <button class="boton rojo" onclick="borrarTodo()">🗑️ Limpiar</button>
+    </div>
+</div>
+
+<!-- 🌲 ESCENA DEL BOSQUE -->
+<div class="escena-bosque">
+    <div class="bosque-visual" id="escenaBosque">
+        🌲🌳🌿🐻🌲🍃🦊🌲🌸🦌🌿🌳
+    </div>
+    <div style="text-align:center; font-weight:bold; color:#006400; margin-bottom:10px;">
+        🌍 Tu aventura en el bosque — Todo lo que quieras crear
+    </div>
+    <div class="etiqueta-dato">
+        ⏱️ Duración que elijas: 8min, 20min, 1h, 2h, 3h — <b>Sin límites</b>
+    </div>
+    <div class="etiqueta-dato">
+        📱 Funciona en celulares — Tu logo, tu marca, tu mundo
+    </div>
+</div>
+
+<!-- 🧍 CREADOR DE PERSONAJES, OBJETOS Y EDIFICIOS -->
+<div class="creador">
+    <div style="font-weight:bold; color:#006400; margin-bottom:10px;">
+        🧍 Creador de personajes, edificios, muebles, cocina y objetos reales
+    </div>
+
+    <select id="tipoCosa">
+        <option value="Personaje">Personaje</option>
+        <option value="Varón">Varón</option>
+        <option value="Niño">Niño</option>
+        <option value="Mujer">Mujer</option>
+        <option value="Edificio">Edificio</option>
+        <option value="Casa">Casa</option>
+        <option value="Cocina">Cocina</option>
+        <option value="Mueble">Mueble</option>
+        <option value="Vehículo">Vehículo</option>
+        <option value="Dinero">Dinero</option>
+        <option value="Ley">Ley</option>
+        <option value="Objeto real">Objeto real</option>
+        <option value="Animal">Animal</option>
+        <option value="Comida">Comida</option>
+    </select>
+
+    <input id="nombreCosa" type="text" placeholder="Nombre: ejemplo: niño con camisa roja, cocina moderna, casa de madera...">
+    <input id="colorCosa" type="text" placeholder="Color: ejemplo: rojo, azul, madera, blanco...">
+    <input id="detalleCosa" type="text" placeholder="Detalle: ejemplo: vive en el bosque, tiene dinero, es cocina con nevera...">
+
+    <button class="boton verde-claro" onclick="crearCosa()">✅ Crear</button>
+    <button class="boton naranja" onclick="verCreados()">📦 Ver todo creado</button>
+
+    <div id="listaCreados" class="lista-creados"></div>
+</div>
+
+<!-- 📂 SUBIR TUS FOTOS Y VIDEOS -->
+<div class="zona-archivos">
+    <div style="font-weight:bold; margin-bottom:10px; color:#006400;">📷 Tus fotos y videos de la galería:</div>
+    <input type="file" id="subirFoto" accept="image/*" style="margin:5px 0;" onchange="verFoto(this)">
+    <input type="file" id="subirVideo" accept="video/*" style="margin:5px 0;" onchange="verVideo(this)">
+    <div id="vistaArchivos"></div>
+</div>
+
+<!-- 💬 PANTALLA DE DIÁLOGO -->
+<div id="pantalla">
+    <div class="mensaje mio">
+        ¡Todo listo! 🌲🐻<br>
+        ✅ Podés crear cualquier personaje, varón, niño, mujer, animal<br>
+        ✅ Edificios, casas, cocinas, muebles, vehículos, dinero, leyes<br>
+        ✅ Todo lo que existe en la vida real<br>
+        ✅ Subí tus fotos y videos de tu galería<br>
+        ✅ Decime lo que querés hacer: "crear niño", "crear cocina", "hacer video del bosque"...
+    </div>
+</div>
+
+<!-- ⌨️ BARRA DE ESCRITURA -->
+<div class="abajo">
+    <input type="text" id="texto" class="escribir" placeholder="Escribí acá tu aventura..."
+    onkeydown="if(event.key==='Enter') enviar()">
+    <button class="micro" id="botonMicro" onclick="activarMicro()">🎤</button>
+    <button class="boton verde-claro" onclick="enviar()">➤</button>
+
+    <div style="width:100%; display:flex; gap:8px; margin-top:8px; flex-wrap:wrap;">
+        <button class="boton dorado" onclick="elegirTiempo()">⏱️ Tiempo</button>
+        <button class="boton azul" onclick="cambiarEscena()">🌲 Cambiar bosque</button>
+        <button class="boton morado" onclick="abrirCreador()">🧍 Crear personaje</button>
+    </div>
+
+    <div id="menuTiempo" class="duracion">
+        <span style="width:100%; font-weight:bold;">⏱️ Elegí la duración:</span>
+        <button class="boton" onclick="ponerTiempo('8 minutos')">8 min</button>
+        <button class="boton" onclick="ponerTiempo('20 min')">20 min</button>
+        <button class="boton" onclick="ponerTiempo('40 min')">40 min</button>
+        <button class="boton" onclick="ponerTiempo('1 hora')">1 hora</button>
+        <button class="boton" onclick="ponerTiempo('2 horas')">2 horas</button>
+        <button class="boton" onclick="ponerTiempo('3 horas')">3 horas</button>
+        <button class="boton verde-claro" onclick="ponerTiempo('Sin límite')">Sin límite ✅</button>
+    </div>
+</div>
+
+<script>
+    const pantalla = document.getElementById('pantalla');
+    const texto = document.getElementById('texto');
+    const escena = document.getElementById('escenaBosque');
+    const archivos = document.getElementById('vistaArchivos');
+    const listaCreados = document.getElementById('listaCreados');
+
+    let tiempoElegido = "Sin límite";
+    let escuchando = false;
+    let reconocimiento = null;
+    let cosasCreadas = [];
+
+    // 🔊 Voz
+    function hablar(mensaje) {
+        speechSynthesis.cancel();
+        const speech = new SpeechSynthesisUtterance(mensaje);
+        speech.lang = "es-ES";
+        speech.rate = 0.85;
+        speechSynthesis.speak(speech);
+    }
+
+    // 💬 Mensaje
+    function mensaje(texto, esTuyo=false) {
+        const div = document.createElement('div');
+        div.className = `mensaje ${esTuyo ? 'tuyo' : 'mio'}`;
+        div.textContent = texto;
+        pantalla.appendChild(div);
+        pantalla.scrollTop = pantalla.scrollHeight;
+    }
+
+    // 🗑️ Borrar
+    function borrarTodo() {
+        pantalla.innerHTML = '';
+        archivos.innerHTML = '';
+        listaCreados.innerHTML = '';
+        cosasCreadas = [];
+        mensaje("Todo limpio. Empecemos de nuevo.");
+        hablar("Todo limpio. Tu mundo empieza ahora.");
+    }
+
+    // ⏱️ Tiempo
+    function elegirTiempo() {
+        const menu = document.getElementById('menuTiempo');
+        menu.style.display = menu.style.display === 'flex' ? 'none' : 'flex';
+    }
+    function ponerTiempo(t) {
+        tiempoElegido = t;
+        mensaje(`Duración elegida: ${t}`);
+        hablar(`Listo. Duración: ${t}. Todo el tiempo que necesites.`);
+        document.getElementById('menuTiempo').style.display = 'none';
+    }
+
+    // 🌲 Escena
+    function cambiarEscena() {
+        const opciones = [
+            '🌲🌳🌿🐻🌲🍃🦊🌲🌸🦌🌿🌳',
+            '🌲🌲🌙✨🐻⭐🌿🌲🦉🍄🌲🌌',
+            '☀️🌲🌿🐻🌻🦋🌲🌸🐝🌳🍃',
+            '❄️🌲🌨️🐻⛄🌲❄️🦊🌨️🌲☃️',
+            '🌅🌲🌄🐻✨🌿🌇🦌🌸🌳'
+        ];
+        escena.innerHTML = opciones[Math.floor(Math.random() * opciones.length)];
+        mensaje("Bosque cambiado ✨");
+        hablar("Nuevo paisaje listo.");
+    }
+
+    // 🧍 Creador
+    function abrirCreador() {
+        document.querySelector('.creador').scrollIntoView({behavior:'smooth'});
+        hablar("Creador abierto. Escribí lo que querés crear.");
+    }
+
+    function crearCosa() {
+        const tipo = document.getElementById('tipoCosa').value;
+        const nombre = document.getElementById('nombreCosa').value.trim();
+        const color = document.getElementById('colorCosa').value.trim();
+        const detalle = document.getElementById('detalleCosa').value.trim();
+
+        if (!nombre) {
+            mensaje("Escribí el nombre de lo que querés crear.");
+            hablar("Decime qué querés crear.");
+            return;
+        }
+
+        const cosa = {tipo, nombre, color, detalle};
+        cosasCreadas.push(cosa);
+
+        const tarjeta = document.createElement('div');
+        tarjeta.className = 'tarjeta';
+        tarjeta.innerHTML = `
+            <b>${tipo}</b><br>
+            ${nombre}<br>
+            Color: ${color || 'no especificado'}<br>
+            Detalle: ${detalle || 'ninguno'}
+        `;
+        listaCreados.appendChild(tarjeta);
+
+        mensaje(`✅ Creado: ${tipo} — ${nombre}`);
+        hablar(`${tipo} ${nombre} creado.`);
+
+        document.getElementById('nombreCosa').value = '';
+        document.getElementById('colorCosa').value = '';
+        document.getElementById('detalleCosa').value = '';
+    }
+
+    function verCreados() {
+        if (cosasCreadas.length === 0) {
+            mensaje("No hay nada creado todavía.");
+            hablar("Aún no creaste nada.");
+            return;
+        }
+        mensaje(`📦 Tienes ${cosasCreadas.length} cosas creadas. Mirá la lista.`);
+        hablar(`Tienes ${cosasCreadas.length} cosas creadas.`);
+    }
+
+    // 📷 Foto
+    function verFoto(input) {
+        const archivo = input.files[0];
+        if (!archivo) return;
+        const lector = new FileReader();
+        lector.onload = function(e) {
+            archivos.innerHTML += `<img src="${e.target.result}" class="vista-imagen" alt="Tu foto">`;
+            mensaje("Foto subida ✅");
+            hablar("Tu foto está acá.");
+        };
+        lector.readAsDataURL(archivo);
+    }
+
+    // 🎞️ Video
+    function verVideo(input) {
+        const archivo = input.files[0];
+        if (!archivo) return;
+        const url = URL.createObjectURL(archivo);
+        archivos.innerHTML += `<video controls class="vista-video" src="${url}">Tu video</video>`;
+        mensaje("Video subido ✅");
+        hablar("Tu video está acá.");
+    }
+
+    // 📤 Enviar
+    function enviar() {
+        const t = texto.value.trim();
+        if (!t) return;
+        mensaje(t, true);
+        texto.value = '';
+
+        const saludo = /buenos días|buenas tardes|buenas noches|hola|qué tal/i;
+        if (saludo.test(t)) {
+            mensaje("¡Hola! 🌲 Tu bosque está listo. Decime qué querés crear.");
+            hablar("¡Hola! Tu bosque te espera.");
+            return;
+        }
+
+        const quieroVideo = /video|crear|armar|hacer/i.test(t);
+        const quieroImagen = /imagen|foto|dibujo|paisaje/i.test(t);
+
+        if (quieroImagen) {
+            mensaje(`🖼️ Imagen: ${t}`);
+            hablar(`Imagen de ${t} lista.`);
+        } else if (quieroVideo) {
+            mensaje(`🎥 Video: ${t} — Duración: ${tiempoElegido}`);
+            hablar(`Video de ${t}, duración ${tiempoElegido}.`);
+        } else {
+            mensaje(`Entendido: ${t}. ¿Lo querés como imagen o como video?`);
+            hablar("Entendido. ¿Imagen o video?");
+        }
+    }
+
+    // 🎤 Micrófono
+    function activarMicro() {
+        if (!('webkitSpeechRecognition' in window)) {
+            mensaje("Usá Chrome para el micrófono.");
+            hablar("Abrime en Chrome para usar el micrófono.");
+            return;
+        }
+
+        if (escuchando) {
+            reconocimiento.stop();
+            escuchando = false;
+            document.getElementById('botonMicro').classList.remove('micro-activo');
+            return;
+        }
+
+        reconocimiento = new webkitSpeechRecognition();
+        reconocimiento.lang = "es-ES";
+        reconocimiento.continuous = false;
+
+        reconocimiento.onstart = () => {
+            escuchando = true;
+            document.getElementById('botonMicro').classList.add('micro-activo');
+            hablar("Te escucho. Decime...");
+        };
+
+        reconocimiento.onresult = (e) => {
+            const dicho = e.results[0][0].transcript;
+            texto.value = dicho;
+            enviar();
+        };
+
+        reconocimiento.onend = () => {
+            escuchando = false;
+            document.getElementById('botonMicro').classList.remove('micro-activo');
+        };
+
+        reconocimiento.start();
+    }
+
+    window.onload = () => {
+        setTimeout(() => hablar("Bienvenido a tu mundo. Podés crear cualquier cosa, personajes, edificios, cocinas, dinero, leyes y todo lo que exista. ¿Qué creamos hoy?"), 800);
+    };
+</script>
+</body>
+</html>
