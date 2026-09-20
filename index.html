@@ -1,1 +1,223 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZENTRITH ASISTENTE</title>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#ffffff">
+    <style>
+        * {margin:0;padding:0;box-sizing:border-box;font-family:system-ui,-apple-system,sans-serif;}
+        body {
+            min-height:100vh;
+            background:#f7f8fa;
+            display:flex;flex-direction:column;
+            color:#111;
+        }
+
+        /* Barra superior igual a la imagen */
+        .barra-superior {
+            background:#fff;
+            padding:15px 20px;
+            display:flex;align-items:center;justify-content:space-between;
+            border-bottom:1px solid #eee;
+            box-shadow:0 1px 3px rgba(0,0,0,.05);
+        }
+        .titulo-app {
+            font-size:18px;
+            font-weight:600;
+            color:#222;
+        }
+        .icono {
+            font-size:22px;
+            background:none;border:none;
+            cursor:pointer;
+        }
+
+        /* Espacio principal limpio */
+        .contenido {
+            flex:1;
+            display:flex;flex-direction:column;align-items:center;justify-content:center;
+            padding:30px 20px;
+            text-align:center;
+        }
+        .logo-chico {
+            width:60px;height:60px;
+            border-radius:50%;
+            background:linear-gradient(135deg,#39f,#c0f);
+            margin-bottom:25px;
+        }
+        .mensaje-bienvenida {
+            font-size:20px;
+            color:#444;
+            margin-bottom:40px;
+            max-width:350px;
+        }
+
+        /* Botones iguales a la lista */
+        .boton-opcion {
+            width:100%;max-width:400px;
+            background:#fff;
+            border:1px solid #e5e7eb;
+            border-radius:12px;
+            padding:16px 20px;
+            margin:10px 0;
+            text-align:left;
+            font-size:17px;
+            cursor:pointer;
+            display:flex;align-items:center;gap:12px;
+            transition:all .2s;
+        }
+        .boton-opcion:hover {
+            background:#f9fafb;
+            border-color:#d1d5db;
+        }
+        .icono-boton {
+            font-size:20px;
+            color:#39f;
+        }
+
+        /* Barra de abajo con micrófono */
+        .barra-inferior {
+            background:#fff;
+            padding:15px 20px 30px;
+            border-top:1px solid #eee;
+            display:flex;gap:12px;
+            align-items:center;
+        }
+        .boton-micro {
+            width:50px;height:50px;
+            border-radius:50%;
+            background:linear-gradient(135deg,#39f,#c0f);
+            border:none;
+            color:white;
+            font-size:22px;
+            cursor:pointer;
+            display:flex;align-items:center;justify-content:center;
+            flex-shrink:0;
+        }
+        .texto-entrada {
+            flex:1;
+            background:#f3f4f6;
+            border-radius:25px;
+            padding:14px 20px;
+            color:#666;
+            font-size:16px;
+        }
+
+        /* Estado de voz */
+        .estado-voz {
+            background:#ecfdf5;
+            color:#065f46;
+            padding:14px 25px;
+            border-radius:12px;
+            margin-top:20px;
+            display:none;
+            font-size:17px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Barra superior -->
+    <div class="barra-superior">
+        <button class="icono">☰</button>
+        <div class="titulo-app">ZENTRITH ASISTENTE</div>
+        <button class="icono">🔄</button>
+    </div>
+
+    <!-- Centro igual a tu imagen -->
+    <div class="contenido">
+        <div class="logo-chico"></div>
+        <p class="mensaje-bienvenida">Hola, soy tu asistente. Hablá con tu voz, yo te escucho y te hablo todo.</p>
+
+        <button class="boton-opcion" onclick="iniciarChatVoz()">
+            <span class="icono-boton">🎧</span>
+            <span>Iniciar chat de voz</span>
+        </button>
+
+        <button class="boton-opcion" onclick="hablar('Todo listo. Estoy lista para ayudarte.')">
+            <span class="icono-boton">🔊</span>
+            <span>Escuchar explicación</span>
+        </button>
+
+        <div id="estadoVoz" class="estado-voz">🎤 Te estoy escuchando...</div>
+    </div>
+
+    <!-- Barra de abajo igual -->
+    <div class="barra-inferior">
+        <button class="icono">+</button>
+        <div class="texto-entrada">Tocá el micrófono para hablarme...</div>
+        <button class="boton-micro" onclick="escuchar()">🎤</button>
+    </div>
+
+    <script>
+        // 🗣️ Voz clara y natural
+        function hablar(texto) {
+            speechSynthesis.cancel();
+            const voz = new SpeechSynthesisUtterance(texto);
+            voz.lang = "es-ES";
+            voz.volume = 1;
+            voz.rate = 0.9;
+            voz.pitch = 1;
+            speechSynthesis.speak(voz);
+        }
+
+        // 🎤 Escuchar tu voz
+        function escuchar() {
+            if (!('webkitSpeechRecognition' in window)) {
+                hablar("Usá navegador Chrome para usar micrófono.");
+                return;
+            }
+
+            const recon = new webkitSpeechRecognition();
+            recon.lang = "es-ES";
+            recon.continuous = false;
+
+            recon.onstart = () => {
+                document.getElementById("estadoVoz").style.display = "block";
+                document.getElementById("estadoVoz").textContent = "🎙️ Escuchando... Hablá claro.";
+            };
+
+            recon.onresult = (e) => {
+                document.getElementById("estadoVoz").style.display = "none";
+                const dicho = e.results[0][0].transcript;
+                responder(dicho);
+            };
+
+            recon.onerror = () => {
+                document.getElementById("estadoVoz").style.display = "none";
+                hablar("No te escuché bien. Intentá de nuevo.");
+            };
+
+            recon.start();
+        }
+
+        // 💬 Responderte
+        function responder(frase) {
+            const t = frase.toLowerCase();
+            let rta = "";
+
+            if (t.includes("hola")) rta = "¡Hola! Qué gusto. ¿En qué te ayudo?";
+            else if (t.includes("nombre")) rta = "Soy ZENTRITH ASISTENTE, tu compañera.";
+            else if (t.includes("jugar")) rta = "¡Dale! Podemos armar tu mundo ZENTRITH.";
+            else if (t.includes("ayuda")) rta = "Tocá el micrófono o el botón de chat de voz.";
+            else if (t.includes("gracias")) rta = "¡De nada! Estoy siempre para vos.";
+            else rta = "Entendido. Decime qué querés que hagamos.";
+
+            hablar(rta);
+        }
+
+        function iniciarChatVoz() {
+            hablar("Modo chat activado. Hablá cuando quieras.");
+            setTimeout(escuchar, 800);
+        }
+
+        // Saludo inicial
+        window.onload = () => {
+            setTimeout(() => hablar("Bienvenido a ZENTRITH ASISTENTE. Es igual a la aplicación que viste. Tocá el micrófono para hablar."), 500);
+        };
+    </script>
+</body>
+          </html>
 
