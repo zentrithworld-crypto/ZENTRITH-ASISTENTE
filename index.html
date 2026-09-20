@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ZENTRITH ASISTENTE</title>
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="theme-color" content="#ffffff">
+    <meta name="theme-color" content="#f7f8fa">
     <style>
         * {margin:0;padding:0;box-sizing:border-box;font-family:system-ui,-apple-system,sans-serif;}
         body {
@@ -15,209 +15,251 @@
             color:#111;
         }
 
-        /* Barra superior igual a la imagen */
+        /* Barra superior */
         .barra-superior {
             background:#fff;
-            padding:15px 20px;
+            padding:14px 18px;
             display:flex;align-items:center;justify-content:space-between;
-            border-bottom:1px solid #eee;
-            box-shadow:0 1px 3px rgba(0,0,0,.05);
+            border-bottom:1px solid #e5e7eb;
+            position:sticky;top:0;z-index:10;
         }
-        .titulo-app {
-            font-size:18px;
-            font-weight:600;
-            color:#222;
-        }
-        .icono {
-            font-size:22px;
-            background:none;border:none;
-            cursor:pointer;
-        }
+        .titulo {font-size:18px;font-weight:600;}
+        .icono {border:none;background:none;font-size:20px;cursor:pointer;padding:6px;}
 
-        /* Espacio principal limpio */
-        .contenido {
+        /* Historial de chat */
+        .chat {
             flex:1;
-            display:flex;flex-direction:column;align-items:center;justify-content:center;
-            padding:30px 20px;
-            text-align:center;
+            overflow-y:auto;
+            padding:16px;
+            display:flex;flex-direction:column;gap:14px;
         }
-        .logo-chico {
-            width:60px;height:60px;
-            border-radius:50%;
-            background:linear-gradient(135deg,#39f,#c0f);
-            margin-bottom:25px;
-        }
-        .mensaje-bienvenida {
-            font-size:20px;
-            color:#444;
-            margin-bottom:40px;
-            max-width:350px;
-        }
-
-        /* Botones iguales a la lista */
-        .boton-opcion {
-            width:100%;max-width:400px;
-            background:#fff;
-            border:1px solid #e5e7eb;
-            border-radius:12px;
-            padding:16px 20px;
-            margin:10px 0;
-            text-align:left;
-            font-size:17px;
-            cursor:pointer;
-            display:flex;align-items:center;gap:12px;
-            transition:all .2s;
-        }
-        .boton-opcion:hover {
-            background:#f9fafb;
-            border-color:#d1d5db;
-        }
-        .icono-boton {
-            font-size:20px;
-            color:#39f;
-        }
-
-        /* Barra de abajo con micrófono */
-        .barra-inferior {
-            background:#fff;
-            padding:15px 20px 30px;
-            border-top:1px solid #eee;
-            display:flex;gap:12px;
-            align-items:center;
-        }
-        .boton-micro {
-            width:50px;height:50px;
-            border-radius:50%;
-            background:linear-gradient(135deg,#39f,#c0f);
-            border:none;
-            color:white;
-            font-size:22px;
-            cursor:pointer;
-            display:flex;align-items:center;justify-content:center;
-            flex-shrink:0;
-        }
-        .texto-entrada {
-            flex:1;
-            background:#f3f4f6;
-            border-radius:25px;
-            padding:14px 20px;
-            color:#666;
+        .mensaje {
+            max-width:85%;
+            padding:12px 16px;
+            border-radius:18px;
+            line-height:1.5;
             font-size:16px;
         }
-
-        /* Estado de voz */
-        .estado-voz {
-            background:#ecfdf5;
-            color:#065f46;
-            padding:14px 25px;
-            border-radius:12px;
-            margin-top:20px;
-            display:none;
-            font-size:17px;
+        .usuario {
+            background:#3b82f6;
+            color:white;
+            align-self:flex-end;
+            border-bottom-right-radius:4px;
         }
+        .asistente {
+            background:#e5e7eb;
+            color:#111;
+            align-self:flex-start;
+            border-bottom-left-radius:4px;
+        }
+        .imagen-chat {
+            max-width:220px;
+            border-radius:12px;
+            margin:6px 0;
+        }
+
+        /* Botones funciones */
+        .acciones {
+            display:flex;gap:10px;padding:10px 16px;flex-wrap:wrap;
+        }
+        .btn-accion {
+            background:#fff;border:1px solid #d1d5db;border-radius:20px;
+            padding:8px 14px;font-size:14px;cursor:pointer;
+            display:flex;align-items:center;gap:6px;
+        }
+        .btn-accion:hover {background:#f3f4f6;}
+
+        /* Entrada inferior */
+        .barra-inferior {
+            background:#fff;
+            border-top:1px solid #e5e7eb;
+            padding:12px 16px 24px;
+            display:flex;gap:10px;align-items:flex-end;
+        }
+        .entrada {
+            flex:1;
+            background:#f3f4f6;border:none;border-radius:24px;
+            padding:12px 18px;font-size:16px;resize:none;min-height:46px;
+        }
+        .boton-principal {
+            width:46px;height:46px;border-radius:50%;border:none;
+            background:#3b82f6;color:white;font-size:18px;cursor:pointer;
+            display:flex;align-items:center;justify-content:center;
+        }
+        .oculto {display:none;}
+        .grabando {background:#ef4444;animation:pulsar 1s infinite;}
+        @keyframes pulsar {0%{opacity:1;}50%{opacity:0.7;}100%{opacity:1;}}
     </style>
 </head>
 <body>
 
-    <!-- Barra superior -->
     <div class="barra-superior">
         <button class="icono">☰</button>
-        <div class="titulo-app">ZENTRITH ASISTENTE</div>
-        <button class="icono">🔄</button>
+        <div class="titulo">ZENTRITH ASISTENTE</div>
+        <button class="icono" id="btnVideo" onclick="toggleVideo()">📹</button>
     </div>
 
-    <!-- Centro igual a tu imagen -->
-    <div class="contenido">
-        <div class="logo-chico"></div>
-        <p class="mensaje-bienvenida">Hola, soy tu asistente. Hablá con tu voz, yo te escucho y te hablo todo.</p>
-
-        <button class="boton-opcion" onclick="iniciarChatVoz()">
-            <span class="icono-boton">🎧</span>
-            <span>Iniciar chat de voz</span>
-        </button>
-
-        <button class="boton-opcion" onclick="hablar('Todo listo. Estoy lista para ayudarte.')">
-            <span class="icono-boton">🔊</span>
-            <span>Escuchar explicación</span>
-        </button>
-
-        <div id="estadoVoz" class="estado-voz">🎤 Te estoy escuchando...</div>
+    <div class="acciones">
+        <button class="btn-accion" onclick="document.getElementById('imgInput').click()">🖼️ Enviar imagen</button>
+        <input type="file" id="imgInput" accept="image/*" class="oculto" onchange="subirImagen(event)">
+        <button class="btn-accion" id="btnGrabar" onclick="toggleGrabarVideo()">⏺️ Grabar video (hasta 40min)</button>
+        <button class="btn-accion" onclick="iniciarVoz()">🎤 Chat de voz</button>
     </div>
 
-    <!-- Barra de abajo igual -->
+    <div class="chat" id="chat">
+        <div class="mensaje asistente">Hola! Soy tu asistente. Podés hablarme, escribirme, mandar fotos y grabar videos largos.</div>
+    </div>
+
     <div class="barra-inferior">
-        <button class="icono">+</button>
-        <div class="texto-entrada">Tocá el micrófono para hablarme...</div>
-        <button class="boton-micro" onclick="escuchar()">🎤</button>
+        <textarea class="entrada" id="textoEntrada" placeholder="Escribí tu mensaje..." rows="1"></textarea>
+        <button class="boton-principal" id="botonEnvio" onclick="enviarMensaje()">➤</button>
+        <button class="boton-principal" style="background:#10b981" id="botonMicro" onclick="escucharVoz()">🎤</button>
     </div>
 
+    <!-- Elementos ocultos para cámara/video -->
+    <video id="camara" autoplay muted playsinline class="oculto" style="width:100%;max-height:300px;object-fit:cover;"></video>
+    <canvas id="canvas" class="oculto"></canvas>
     <script>
-        // 🗣️ Voz clara y natural
+        // Elementos
+        const chat = document.getElementById('chat');
+        const entrada = document.getElementById('textoEntrada');
+        let grabacionActiva = false;
+        let mediaRecorder = null;
+        let chunks = [];
+        let streamCamara = null;
+
+        // 🗣️ Voz
         function hablar(texto) {
             speechSynthesis.cancel();
-            const voz = new SpeechSynthesisUtterance(texto);
-            voz.lang = "es-ES";
-            voz.volume = 1;
-            voz.rate = 0.9;
-            voz.pitch = 1;
-            speechSynthesis.speak(voz);
+            const u = new SpeechSynthesisUtterance(texto);
+            u.lang = 'es-ES';u.rate=0.9;u.volume=1;
+            speechSynthesis.speak(u);
+            agregarMensaje(texto, 'asistente');
         }
 
-        // 🎤 Escuchar tu voz
-        function escuchar() {
-            if (!('webkitSpeechRecognition' in window)) {
-                hablar("Usá navegador Chrome para usar micrófono.");
-                return;
-            }
+        // 💬 Agregar mensaje al chat
+        function agregarMensaje(texto, quien) {
+            const div = document.createElement('div');
+            div.className = `mensaje ${quien}`;
+            div.textContent = texto;
+            chat.appendChild(div);
+            chat.scrollTop = chat.scrollHeight;
+        }
 
-            const recon = new webkitSpeechRecognition();
-            recon.lang = "es-ES";
-            recon.continuous = false;
+        function agregarImagen(src, quien='usuario') {
+            const div = document.createElement('div');
+            div.className = `mensaje ${quien}`;
+            const img = document.createElement('img');
+            img.src = src;img.className='imagen-chat';
+            div.appendChild(img);
+            chat.appendChild(div);
+            chat.scrollTop = chat.scrollHeight;
+        }
 
-            recon.onstart = () => {
-                document.getElementById("estadoVoz").style.display = "block";
-                document.getElementById("estadoVoz").textContent = "🎙️ Escuchando... Hablá claro.";
-            };
+        // ✍️ Escribir y enviar
+        function enviarMensaje() {
+            const t = entrada.value.trim();
+            if(!t) return;
+            agregarMensaje(t, 'usuario');
+            entrada.value='';
+            responder(t);
+        }
+        entrada.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();enviarMensaje();}});
 
-            recon.onresult = (e) => {
-                document.getElementById("estadoVoz").style.display = "none";
+        // 🎤 Voz a texto
+        function escucharVoz() {
+            if(!('webkitSpeechRecognition' in window)) return hablar("Usá Chrome para micrófono.");
+            const rec = new webkitSpeechRecognition();
+            rec.lang='es-ES';rec.continuous=false;
+            rec.onresult=e=>{
                 const dicho = e.results[0][0].transcript;
+                agregarMensaje(dicho, 'usuario');
                 responder(dicho);
             };
-
-            recon.onerror = () => {
-                document.getElementById("estadoVoz").style.display = "none";
-                hablar("No te escuché bien. Intentá de nuevo.");
-            };
-
-            recon.start();
+            rec.start();
         }
+        function iniciarVoz() { hablar("Chat de voz activado. Decime lo que quieras."); setTimeout(escucharVoz, 600); }
 
-        // 💬 Responderte
+        // 🧠 Respuestas
         function responder(frase) {
             const t = frase.toLowerCase();
-            let rta = "";
-
-            if (t.includes("hola")) rta = "¡Hola! Qué gusto. ¿En qué te ayudo?";
-            else if (t.includes("nombre")) rta = "Soy ZENTRITH ASISTENTE, tu compañera.";
-            else if (t.includes("jugar")) rta = "¡Dale! Podemos armar tu mundo ZENTRITH.";
-            else if (t.includes("ayuda")) rta = "Tocá el micrófono o el botón de chat de voz.";
-            else if (t.includes("gracias")) rta = "¡De nada! Estoy siempre para vos.";
-            else rta = "Entendido. Decime qué querés que hagamos.";
-
+            let rta = "Entendido. ¿En qué más te ayudo?";
+            if(t.includes('hola')) rta="¡Hola! Qué gusto estar acá con vos.";
+            else if(t.includes('imagen')||t.includes('foto')) rta="Recibí tu imagen, se ve bien.";
+            else if(t.includes('video')||t.includes('grabar')) rta="Podemos grabar hasta 40 minutos, sí.";
+            else if(t.includes('gracias')) rta="¡De nada! Estoy para siempre.";
             hablar(rta);
         }
 
-        function iniciarChatVoz() {
-            hablar("Modo chat activado. Hablá cuando quieras.");
-            setTimeout(escuchar, 800);
+        // 🖼️ Subir imagen
+        function subirImagen(e) {
+            const arch = e.target.files[0];
+            if(!arch) return;
+            const lec = new FileReader();
+            lec.onload = evt=>{
+                agregarImagen(evt.target.result);
+                hablar("Imagen enviada correctamente.");
+            };
+            lec.readAsDataURL(arch);
         }
 
-        // Saludo inicial
+        // 📹 Cámara y grabación larga (40min)
+        async function toggleVideo() {
+            const v = document.getElementById('camara');
+            if(v.classList.contains('oculto')) {
+                try {
+                    streamCamara = await navigator.mediaDevices.getUserMedia({video:true,audio:true});
+                    v.srcObject = streamCamara;
+                    v.classList.remove('oculto');
+                    hablar("Cámara prendida. Listo para grabar.");
+                } catch { hablar("No se pudo acceder a cámara/micrófono."); }
+            } else {
+                detenerTodo();
+                v.classList.add('oculto');
+                hablar("Cámara apagada.");
+            }
+        }
+
+        async function toggleGrabarVideo() {
+            const btn = document.getElementById('btnGrabar');
+            if(!grabacionActiva) {
+                if(!streamCamara) {
+                    try { streamCamara = await navigator.mediaDevices.getUserMedia({video:true,audio:true}); document.getElementById('camara').srcObject=streamCamara; }
+                    catch { hablar("Activá cámara primero."); return; }
+                }
+                // Hasta 40 minutos
+                mediaRecorder = new MediaRecorder(streamCamara);
+                chunks=[];
+                mediaRecorder.ondataavailable=e=>chunks.push(e.data);
+                mediaRecorder.onstop=()=>{
+                    const blob=new Blob(chunks,{type:'video/mp4'});
+                    const url=URL.createObjectURL(blob);
+                    agregarMensaje("Video guardado (hasta 40min): "+url, 'asistente');
+                    hablar("Video finalizado y guardado.");
+                };
+                mediaRecorder.start();
+                grabacionActiva=true;
+                btn.classList.add('grabando');
+                btn.textContent="⏹️ Detener";
+                hablar("Grabando... puede durar hasta 40 minutos.");
+            } else {
+                mediaRecorder.stop();
+                grabacionActiva=false;
+                btn.classList.remove('grabando');
+                btn.textContent="⏺️ Grabar video";
+            }
+        }
+
+        function detenerTodo() {
+            if(streamCamara) streamCamara.getTracks().map(t=>t.stop());
+            if(mediaRecorder && mediaRecorder.state!=='inactive') mediaRecorder.stop();
+            grabacionActiva=false;
+        }
+
+        // Inicio
         window.onload = () => {
-            setTimeout(() => hablar("Bienvenido a ZENTRITH ASISTENTE. Es igual a la aplicación que viste. Tocá el micrófono para hablar."), 500);
+            setTimeout(()=>hablar("Soy ZENTRITH ASISTENTE. Ahora podés escribir, hablar, mandar fotos y grabar videos largos."), 600);
         };
     </script>
 </body>
-          </html>
-
+</html>
